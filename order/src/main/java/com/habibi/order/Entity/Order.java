@@ -68,6 +68,23 @@ public class Order {
     public void setTotal(double total) {
         this.total = total;
     }
-    
-    
+
+    public Long getProdukId() {
+        return produk_id;
+    }
+    public void setProdukId(Long produkId) {
+        this.produk_id = produkId;
+    }
+    public Long getPelangganId() {
+        return pelanggan_id;
+    }
+    public void setPelangganId(Long pelangganId) {
+        this.pelanggan_id = pelangganId;
+    }
+    public Date getTglTrans() {
+        return tgl_trans;
+    }
+    public void setTglTrans(Date tglTrans) {
+        this.tgl_trans = tglTrans;
+    }
 }
