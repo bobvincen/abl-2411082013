@@ -12,6 +12,6 @@ public class ProducerService {
 
     public void kirimPesan(String pesan) {
         rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_NAME, pesan);
-        System.out.println("Pesan berhasil dikirim ke RabbitMQ: " + pesan);
+        System.out.println("Massage sent: " + pesan);
     }
 }

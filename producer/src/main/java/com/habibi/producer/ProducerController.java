@@ -12,8 +12,8 @@ public class ProducerController {
     private ProducerService producerService;
 
     @GetMapping("/kirim")
-    public String kirim(@RequestParam(defaultValue = "Halo dari Spring Boot Habibi!") String pesan) {
+    public String kirim(@RequestParam(defaultValue = "Massage") String pesan) {
         producerService.kirimPesan(pesan);
-        return "Berhasil mengirim pesan ke RabbitMQ: " + pesan;
+        return "Massage sent: " + pesan;
     }
 }
