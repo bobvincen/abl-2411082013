@@ -1,5 +1,8 @@
 package com.habibi.order.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,30 +38,35 @@ public class OrderService {
     public OrderVO saveOrder(Order order) {
         order.setId(null);
 
-    // Cek Pelanggan
-    PelangganVO pelanggan = getPelanggan(order.getPelanggan_id());
+        // Cek Pelanggan
+        PelangganVO pelanggan = getPelanggan(order.getPelanggan_id());
 
-    if (pelanggan == null) {
-        throw new RuntimeException("Pelanggan tidak ditemukan");
+        if (pelanggan == null) {
+            throw new RuntimeException("Pelanggan tidak ditemukan");
+        }
+
+        // Cek Produk
+        ProdukVO produk = getProduk(order.getProduk_id());
+
+        if (produk == null) {
+            throw new RuntimeException("Produk tidak ditemukan");
+        }
+
+        // Ambil harga Produk dan Menghtiung total
+        double total = produk.getHarga() * order.getJumlah();
+
+        order.setTotal(total);
+
+        LocalDate today = LocalDate.now();
+        Date date = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        
+        order.setTglTrans(date);
+
+        Order savedOrder = orderRepository.save(order);
+
+        // Simpan Order
+        return getOrderVO(savedOrder);
     }
-
-    // Cek Produk
-    ProdukVO produk = getProduk(order.getProduk_id());
-
-    if (produk == null) {
-        throw new RuntimeException("Produk tidak ditemukan");
-    }
-
-    // Ambil harga Produk dan Menghtiung total
-    double total = produk.getHarga() * order.getJumlah();
-
-    order.setTotal(total);
-
-    Order savedOrder = orderRepository.save(order);
-
-    // Simpan Order
-    return getOrderVO(savedOrder);
-}
 
     public void deleteOrder(Long id) {
         orderRepository.deleteById(id);
@@ -78,7 +86,6 @@ public class OrderService {
     }
 
     // Mengambil Data Pelanggan
-
     public PelangganVO getPelanggan(Long id) {
 
         return restClient.get()
@@ -88,7 +95,6 @@ public class OrderService {
     }
 
     // Mengambil Data Produk
-
     public ProdukVO getProduk(Long id) {
 
         return restClient.get()
